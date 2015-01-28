@@ -4,6 +4,10 @@ upyun erlang 版 SDK
 
 # 安装
 ```sh
+git clone https://github.com/upyun/erlang-sdk.git
+cd erlang-sdk
+erlc -o ebin src/upyun.erl
+erl -pa ebin
 
 ```
 
@@ -105,6 +109,10 @@ __响应__
 注： 返回的信息包括三部分
 
 ` {Res_status, Res_head, Res_body} `
+
+所有的请求的返回格式都是这样的.
+
+` {返回状态,  返回头信息, 返回的主体信息 }  `
 
 ---------------------------------------
 
@@ -324,4 +332,11 @@ __参数__
 
 # 备注
 
-目前为不稳定版本，还在开发中
+* 目前为不稳定版本，还在开发中.
+* 目前为当个文件直接使用就好，暂无其他依赖.
+
+
+# todo
+* 封装为 otp 应用
+* 采用rebar 管理
+* 缓存刷新的支持
