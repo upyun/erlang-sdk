@@ -2,60 +2,59 @@
 
 upyun erlang 版 SDK
 
-# 安装
+# install
 ```sh
 git clone https://github.com/upyun/erlang-sdk.git
 cd erlang-sdk
-erlc -o ebin src/upyun.erl
+./rebar compile
 erl -pa ebin
 
 ```
 
-# demo
+# quick start
 ```erlang
-1> c(upyun).
-{ok,upyun}
-2> upyun:upyun_init({"mytestbucket","testrkdtest","testrkdtest", v0}).
-{ok, inited}
-3> upyun:getUsage().
+rkd@ubuntu:~/hello/erlang-sdk$ ./rebar compile
+==> erlang-sdk (compile)
+Compiled src/up_sup.erl
+Compiled src/upyun.erl
+Compiled src/up_core.erl
+Compiled src/up_app.erl
+rkd@ubuntu:~/hello/erlang-sdk$ erl -pa ebin/
+Erlang/OTP 17 [erts-6.3] [source] [smp:2:2] [async-threads:10] [kernel-poll:false]
+
+Eshell V6.3  (abort with ^G)
+1> application:start(upyun).
+ok
+2> upyun:init("mytestbucket", "testrkdtest", "testrkdtest").
+{ok,{state,"mytestbucket","testrkdtest","testrkdtest",
+           "v0.api.upyun.com",inited,60000}}
+3> upyun:getUage().
 {{"HTTP/1.1",200,"OK"},
  [{"connection","keep-alive"},
-  {"date","Tue, 20 Jan 2015 07:53:34 GMT"},
+  {"date","Thu, 05 Feb 2015 06:49:25 GMT"},
   {"server","vivi/0.3"},
-  {"content-length","5"},
+  {"content-length","8"},
   {"content-type","text/html"},
-  {"x-request-id","c9c957f1e75977ab9bcda30ee34f2ef9"},
+  {"x-request-id","677749cdbd7dc0dccfe997bd2ea48149"},
   {"access-control-allow-origin","*"},
-  {"x-request-path","api-php-221, ctn-zj-ngb-102"}],
- "61131"}
-4> upyun:listDir().
-{{"HTTP/1.1",200,"OK"},
- [{"connection","keep-alive"},
-  {"date","Tue, 20 Jan 2015 07:53:47 GMT"},
-  {"server","vivi/0.3"},
-  {"content-length","153"},
-  {"content-type","text/html"},
-  {"x-request-id","23576621d9f138fe9adf7d5ea06b811a"},
-  {"access-control-allow-origin","*"},
-  {"x-request-path","api-php-226, ctn-zj-ngb-102"}],
- [["test","F","0","1421659335"],
-  ["mytestbucket","F","0","1420365239"],
-  ["5d175890f603738db530cb9fb01bb051f819ec28.jpg","N","7099",
-   "1420011603"],
-  ["119770078104f3d522l.jpg","N","39732","1420011597"]]}
-5> 
+  {"x-request-path","api-php-083"}],
+ "69943501"}
+4> upyun:info().
+{ok,{"mytestbucket","testrkdtest","testrkdtest",
+     "v0.api.upyun.com",60000}}
 
 ```
 
 # 文档
+
 ## API
-* [`upyun_init`](#upyun_init)
+* [`init`](#init)
 * [`getUsage`](#getUsage)
 * [`listDir`](#listDir)
 * [`createDir`](#createDir)
 * [`removeDir`](#removeDir)
 * [`uploadFile`](#uploadFile)
-* [`getInfo`](#getInfo)
+* [`infoFile`](#infoFile)
 * [`downloadFile`](#downloadFile)
 * [`removeFile`](#removeFile)
 
@@ -63,12 +62,13 @@ erl -pa ebin
 
 # API
 
-<a name="upyun_init" />
-### upyun_init({Buckte, Operator, PassWord, EndPoint})
+<a name="init" />
+### init(Buckte, Operator, PassWord, [EndPoint], [TimeOut])
 初始化配置
 ```erlang
-2> upyun:upyun_init({"mytestbucket","testrkdtest","testrkdtest", v0}).
-{ok, inited}
+2> upyun:init("mytestbucket", "testrkdtest", "testrkdtest").
+{ok,{state,"mytestbucket","testrkdtest","testrkdtest",
+           "v0.api.upyun.com",inited,60000}}
 
 ```
 
@@ -82,8 +82,11 @@ __参数__
   * `cucc` 或 `v2`: 中国联通
   * `cmcc` 或 `v3` 中国移动
   * `v0` 或 `auto` 或 任何其他的值: 将使用 `v0.api.upyun.com` （自动选择合适的线路）
+  * 可缺省，默认值为 v0
+* `timeout`  超时时间设置
+  * 可缺省, 默认值为 60000, 即 60 秒
 
----------------------------------------
+ ---------------------------------------
 
 
 <a name="getUsage" />
@@ -213,7 +216,8 @@ Opts = [{"mkdir", "true"},
         {"x-gmkerl-quality", "70"},
         {"x-gmkerl-unsharp", "false"}]
 ```
-不需要Opts 则传 [] 即可
+* 不需要Opts 则传 [] 即可, 也可不传
+
 
 __响应__
 
@@ -305,15 +309,15 @@ __参数__
 
 ---------------------------------------
 
-<a name='getInfo' />
-### getInfo(RemoteFile)
+<a name='infoFile' />
+### infoFile(RemoteFile)
 获取文件信息
 
 __参数__
 * `RemoteFile`  文件的路径 eg: "/mytestbucket/test/test/upyun.erl"
 
 ```erlang
-14> upyun:getInfo("/mytestbucket/test/test/upyun.erl").
+14> upyun:infoFile("/mytestbucket/test/test/upyun.erl").
 {{"HTTP/1.1",200,"OK"},
  [{"connection","keep-alive"},
   {"date","Mon, 26 Jan 2015 02:21:27 GMT"},
@@ -333,10 +337,9 @@ __参数__
 # 备注
 
 * 目前为不稳定版本，还在开发中.
-* 目前为当个文件直接使用就好，暂无其他依赖.
 
 
 # todo
-* 封装为 otp 应用
-* 采用rebar 管理
+* 流式上传，流式下载
 * 缓存刷新的支持
+* 单元测试
