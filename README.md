@@ -12,7 +12,7 @@ erl -pa ebin
 ```
 
 # quick start
-```erlang
+```
 rkd@ubuntu:~/hello/erlang-sdk$ ./rebar compile
 ==> erlang-sdk (compile)
 Compiled src/up_sup.erl
@@ -63,7 +63,7 @@ ok
 # API
 
 <a name="init" />
-### init(Buckte, Operator, PassWord, [EndPoint], [TimeOut])
+### init(Bucket, Operator, PassWord, [EndPoint], [TimeOut])
 初始化配置
 ```erlang
 2> upyun:init("mytestbucket", "testrkdtest", "testrkdtest").
