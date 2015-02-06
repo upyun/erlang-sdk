@@ -6,7 +6,7 @@ start_test() ->
   application:start(upyun).
 
 init_test() ->
-  {ok, {state, Bucket, Operator, PassWord, "v0.api.upyun.com", Status, 60000}} = upyun:init("travis", "travisci", "testtest"),
+  {ok, {state, Bucket, Operator, PassWord, "v0.api.upyun.com", Status, 600000}} = upyun:init("travis", "travisci", "testtest", v0, 600000),
   ?assert(Bucket =:= "travis"),
   ?assert(Operator =:= "travisci"),
   ?assert(PassWord =:= "testtest"),
