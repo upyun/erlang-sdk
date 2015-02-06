@@ -2,6 +2,8 @@
 
 upyun erlang 版 SDK
 
+[![Build Status](https://travis-ci.org/upyun/erlang-sdk.svg?branch=master)](https://travis-ci.org/upyun/erlang-sdk)
+
 # install
 ```sh
 git clone https://github.com/upyun/erlang-sdk.git
