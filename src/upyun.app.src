@@ -1,10 +1,13 @@
 {application, upyun,
- [{description, "erlang sdk for upyun."},
+ [{description, "UPYUN Erlang SDK"},
   {vsn, "0.1.0"},
-  {modules, [up_app,
-             up_sup,
-             up_core]},
-  {registered, [up_sup]},
-  {applications, [kernel, stdlib]},
-  {mod, {up_app, []}}
+  {registered, []},
+  {modules, []},
+  {applications,
+   [kernel,
+    stdlib,
+    hackney
+   ]},
+  {mod, {upyun, []}},
+  {env,[]}
  ]}.
